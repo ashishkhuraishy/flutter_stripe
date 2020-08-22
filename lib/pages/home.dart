@@ -10,9 +10,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-
   onItemPress(BuildContext context, int index) async {
-    switch(index) {
+    switch (index) {
       case 0:
         payViaNewCard(context);
         break;
@@ -24,21 +23,16 @@ class HomePageState extends State<HomePage> {
 
   payViaNewCard(BuildContext context) async {
     ProgressDialog dialog = new ProgressDialog(context);
-    dialog.style(
-      message: 'Please wait...'
-    );
+    dialog.style(message: 'Please wait...');
     await dialog.show();
-    var response = await StripeService.payWithNewCard(
-      amount: '15000',
-      currency: 'USD'
-    );
+    var response =
+        await StripeService.payWithNewCard(amount: '15000', currency: 'INR');
     await dialog.hide();
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-        content: Text(response.message),
-        duration: new Duration(milliseconds: response.success == true ? 1200 : 3000),
-      )
-    );
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(response.message),
+      duration:
+          new Duration(milliseconds: response.success == true ? 1200 : 3000),
+    ));
   }
 
   @override
@@ -57,37 +51,36 @@ class HomePageState extends State<HomePage> {
       body: Container(
         padding: EdgeInsets.all(20),
         child: ListView.separated(
-          itemBuilder: (context, index) {
-            Icon icon;
-            Text text;
+            itemBuilder: (context, index) {
+              Icon icon;
+              Text text;
 
-            switch(index) {
-              case 0:
-                icon = Icon(Icons.add_circle, color: theme.primaryColor);
-                text = Text('Pay via new card');
-                break;
-              case 1:
-                icon = Icon(Icons.credit_card, color: theme.primaryColor);
-                text = Text('Pay via existing card');
-                break;
-            }
+              switch (index) {
+                case 0:
+                  icon = Icon(Icons.add_circle, color: theme.primaryColor);
+                  text = Text('Pay via new card');
+                  break;
+                case 1:
+                  icon = Icon(Icons.credit_card, color: theme.primaryColor);
+                  text = Text('Pay via existing card');
+                  break;
+              }
 
-            return InkWell(
-              onTap: () {
-                onItemPress(context, index);
-              },
-              child: ListTile(
-                title: text,
-                leading: icon,
-              ),
-            );
-          },
-          separatorBuilder: (context, index) => Divider(
-            color: theme.primaryColor,
-          ),
-          itemCount: 2
-        ),
+              return InkWell(
+                onTap: () {
+                  onItemPress(context, index);
+                },
+                child: ListTile(
+                  title: text,
+                  leading: icon,
+                ),
+              );
+            },
+            separatorBuilder: (context, index) => Divider(
+                  color: theme.primaryColor,
+                ),
+            itemCount: 2),
       ),
-    );;
+    );
   }
 }

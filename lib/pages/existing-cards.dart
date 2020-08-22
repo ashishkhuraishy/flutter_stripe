@@ -12,25 +12,26 @@ class ExistingCardsPage extends StatefulWidget {
 }
 
 class ExistingCardsPageState extends State<ExistingCardsPage> {
-  List cards = [{
-    'cardNumber': '4242424242424242',
-    'expiryDate': '04/24',
-    'cardHolderName': 'Muhammad Ahsan Ayaz',
-    'cvvCode': '424',
-    'showBackView': false,
-  }, {
-    'cardNumber': '5555555566554444',
-    'expiryDate': '04/23',
-    'cardHolderName': 'Tracer',
-    'cvvCode': '123',
-    'showBackView': false,
-  }];
+  List cards = [
+    {
+      'cardNumber': '4242424242424242',
+      'expiryDate': '04/24',
+      'cardHolderName': 'Muhammad Ahsan Ayaz',
+      'cvvCode': '424',
+      'showBackView': false,
+    },
+    {
+      'cardNumber': '4000002760003184',
+      'expiryDate': '04/23',
+      'cardHolderName': 'Tracer',
+      'cvvCode': '123',
+      'showBackView': false,
+    }
+  ];
 
   payViaExistingCard(BuildContext context, card) async {
     ProgressDialog dialog = new ProgressDialog(context);
-    dialog.style(
-      message: 'Please wait...'
-    );
+    dialog.style(message: 'Please wait...');
     await dialog.show();
     var expiryArr = card['expiryDate'].split('/');
     CreditCard stripeCard = CreditCard(
@@ -39,19 +40,17 @@ class ExistingCardsPageState extends State<ExistingCardsPage> {
       expYear: int.parse(expiryArr[1]),
     );
     var response = await StripeService.payViaExistingCard(
-      amount: '2500',
-      currency: 'USD',
-      card: stripeCard
-    );
+        amount: '2500', currency: 'INR', card: stripeCard);
     await dialog.hide();
-    Scaffold.of(context).showSnackBar(
-        SnackBar(
+    Scaffold.of(context)
+        .showSnackBar(SnackBar(
           content: Text(response.message),
           duration: new Duration(milliseconds: 1200),
-        )
-      ).closed.then((_) {
-        Navigator.pop(context);
-      });
+        ))
+        .closed
+        .then((_) {
+      Navigator.pop(context);
+    });
   }
 
   @override
@@ -72,7 +71,7 @@ class ExistingCardsPageState extends State<ExistingCardsPage> {
               },
               child: CreditCardWidget(
                 cardNumber: card['cardNumber'],
-                expiryDate: card['expiryDate'], 
+                expiryDate: card['expiryDate'],
                 cardHolderName: card['cardHolderName'],
                 cvvCode: card['cvvCode'],
                 showBackView: false,
